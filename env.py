@@ -34,7 +34,7 @@ class Car:
         self.reward = 0
         self.total_reward = 0
 
-        length = 200
+        length = 400
         angle_1 = 7 * math.pi / 16
         angle_2 = math.pi / 4
 
@@ -227,7 +227,7 @@ def get_data(car, road, reward):
 
         if not check:
             intersection_points.append([1000, 1000])
-            intersection_distance.append(200)
+            intersection_distance.append(400)
 
     return True, intersection_distance, intersection_points
 
@@ -240,13 +240,13 @@ def make_move(car, pred_1, pred_2):
 
     gas = False
     if pred_2 == 1:
-        car.speed += 0.2
+        car.speed += 0.05
         gas = True
     if pred_2 == 2:
-        car.speed -= 0.2
+        car.speed -= 0.05
 
     if car.speed and not gas:
-        car.speed -= 0.1
+        car.speed -= 0.05
 
     if car.speed > 8:
         car.speed = 8

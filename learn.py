@@ -26,12 +26,13 @@ def get_score(individual):
     alive = True
     action_counter = 0
     total_reward = 0
+    total_speed = 0
 
     # pygame
     if GAME:
         clock = pygame.time.Clock()
 
-    while alive and action_counter < 800:
+    while alive and action_counter < 400:
         action_counter += 1
         alive, x, intersection_points = env.get_data(car, road, reward)
 
@@ -48,6 +49,7 @@ def get_score(individual):
             env.make_move(car, pred_1, pred_2)
 
             total_reward = car.total_reward
+            total_speed += car.speed
 
         # pygame
         if GAME:
@@ -82,6 +84,8 @@ def get_score(individual):
             pygame.display.update()
             clock.tick(FPS)
 
+    avg_speed = total_speed / action_counter
+    total_reward *= avg_speed
     return total_reward,
 
 
@@ -96,24 +100,24 @@ def init_population(pcls, ind_init, filename):
 
 
 if __name__ == '__main__':
-    NEURONS_IN_LAYERS = [10, 6]
+    NEURONS_IN_LAYERS = [10, 8, 6]
 
     network = NNetwork(*NEURONS_IN_LAYERS)
 
     LENGTH_CHROMOSOME = NNetwork.get_total_weights(*NEURONS_IN_LAYERS)
     LOW = -1
     UP = 1
-    ETA = 20
+    ETA = 0.5
 
-    POPULATION_SIZE = 50  # количество индивидуумов в популяции
+    POPULATION_SIZE = 40  # количество индивидуумов в популяции
     P_CROSSOVER = 0.9  # вероятность скрещивания
     P_MUTATION = 0.1  # вероятность мутации индивидуума
-    MAX_GENERATIONS = 20  # максимальное количество поколений
+    MAX_GENERATIONS = 40  # максимальное количество поколений
     HALL_OF_FAME_SIZE = 2
 
     hof = tools.HallOfFame(HALL_OF_FAME_SIZE)
 
-    RANDOM_SEED = 42  # 666
+    RANDOM_SEED = 19  # seed42-80 seed600-80 seed19(42+600)-40 seed19-40
     random.seed(RANDOM_SEED)
 
     creator.create("FitnessMax", base.Fitness, weights=(1.0,))
@@ -126,11 +130,16 @@ if __name__ == '__main__':
     toolbox.register("populationCreator", tools.initRepeat, list, toolbox.individualCreator)
 
     toolbox.register("individual_guess", init_individual, creator.Individual)
-    toolbox.register("population_guess", init_population, list, toolbox.individual_guess, "population_mix.json")
+    toolbox.register("population_guess", init_population, list, toolbox.individual_guess, "data/population_1.json")
 
-    X_TWO = True
+    # не забыть указать путь mix/no mix
+    X_TWO = False
+    TR = True
     if X_TWO:
         algorithms.import_population()
+        population = toolbox.population_guess()
+
+    elif TR:
         population = toolbox.population_guess()
 
     else:

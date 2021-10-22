@@ -21,15 +21,15 @@ if __name__ == '__main__':
     SHOW_ROAD_LINES = True
     SHOW_NAVIGATION_POINTS = False
 
-    IMPORT_ROAD = True
+    IMPORT_ROAD = False
 
     sc = pygame.display.set_mode((W, H))
     pygame.display.set_caption('App')
 
-    with open('data/best_1.json') as file:
+    with open('data/best.json') as file:
         individual = json.load(file)
 
-    NEURONS_IN_LAYERS = [10, 6]
+    NEURONS_IN_LAYERS = [10, 8, 6]
     network = NNetwork(*NEURONS_IN_LAYERS)
     network.set_weights(individual)
 

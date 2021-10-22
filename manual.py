@@ -15,7 +15,7 @@ if __name__ == '__main__':
     WHITE = (255, 255, 255)
     RED = (255, 0, 0)
 
-    SHOW_CAR_LINES = False
+    SHOW_CAR_LINES = True
     SHOW_ROAD_LINES = True
     SHOW_NAVIGATION_POINTS = False
 
@@ -39,13 +39,13 @@ if __name__ == '__main__':
 
         gas = False
         if keys[pygame.K_UP]:
-            car.speed += 0.2
+            car.speed += 0.05
             gas = True
         if keys[pygame.K_DOWN]:
-            car.speed -= 0.2
+            car.speed -= 0.05
 
         if car.speed and not gas:
-            car.speed -= 0.1
+            car.speed -= 0.05
 
         if car.speed > 8:
             car.speed = 8
