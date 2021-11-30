@@ -32,7 +32,7 @@ def get_score(individual):
     if GAME:
         clock = pygame.time.Clock()
 
-    while alive and action_counter < 400:
+    while alive and action_counter < 800:
         action_counter += 1
         alive, x, intersection_points = env.get_data(car, road, reward)
 
@@ -117,7 +117,7 @@ if __name__ == '__main__':
 
     hof = tools.HallOfFame(HALL_OF_FAME_SIZE)
 
-    RANDOM_SEED = 19  # seed42-80 seed600-80 seed19(42+600)-40 seed19-40
+    RANDOM_SEED = 7
     random.seed(RANDOM_SEED)
 
     creator.create("FitnessMax", base.Fitness, weights=(1.0,))
@@ -130,7 +130,7 @@ if __name__ == '__main__':
     toolbox.register("populationCreator", tools.initRepeat, list, toolbox.individualCreator)
 
     toolbox.register("individual_guess", init_individual, creator.Individual)
-    toolbox.register("population_guess", init_population, list, toolbox.individual_guess, "data/population_1.json")
+    toolbox.register("population_guess", init_population, list, toolbox.individual_guess, "data/population_0.json")
 
     # не забыть указать путь mix/no mix
     X_TWO = False
@@ -180,15 +180,24 @@ if __name__ == '__main__':
 
     maxFitnessValues, meanFitnessValues = logbook.select("max", "avg")
 
-    with open('data/best.json', 'w') as file:
+    with open('data/hof[0].json', 'w') as file:
         file.write(json.dumps((hof[0])))
+
+    with open('data/hof[1].json', 'w') as file:
+        file.write(json.dumps((hof[1])))
 
     with open('data/population.json', 'w') as file:
         file.write(json.dumps(population))
+
+    with open('data/logbook.json', 'w') as file:
+        file.write(json.dumps(logbook))
 
     plt.plot(maxFitnessValues, color='red')
     plt.plot(meanFitnessValues, color='green')
     plt.xlabel('Поколение')
     plt.ylabel('Макс/средняя приспособленность')
-    plt.title('Зависимость максимальной и средней приспособленности от поколения')
+    plt.title('Зависимость приспособленности от поколения')
+
+    plt.savefig('data/plt.png')
+
     plt.show()

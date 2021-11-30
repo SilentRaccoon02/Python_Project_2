@@ -42,9 +42,9 @@ def split_predictions(x):
 
 
 def import_population():
-    with open('data/population_1.json') as file:
+    with open('data/population_0.json') as file:
         lst_1 = json.load(file)
-    with open('data/population_2.json') as file:
+    with open('data/population_1.json') as file:
         lst_2 = json.load(file)
 
     lst = lst_1[:25] + lst_2[25:]
